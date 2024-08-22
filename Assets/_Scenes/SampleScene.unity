@@ -381,7 +381,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   animPlayer: {fileID: 1617680459}
-  moveSpeed: 200
+  moveSpeed: 250
   jumpForce: 350
   castWidth: 2.3
 --- !u!1 &1617680457

@@ -24,7 +24,6 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
     }
 
     // Update is called once per frame
@@ -35,11 +34,12 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         isGrounded = CheckGrounded();
-
+    
         // 1 if player move forward, 0 if player don't move and -1 if player move back
         dirX = Input.GetAxisRaw("Horizontal");
 
-        if(isAttacking){
+        if (isAttacking)
+        {
             rbPlayer.velocity = Vector2.zero;
             return;
         }
@@ -49,8 +49,9 @@ public class PlayerController : MonoBehaviour
             if (isJumping)
             {
                 return;
-            }
-            
+            }                    
+
+           
             /* Player moves */
             if (Mathf.Abs(dirX) > 0.1f)
             {
@@ -63,26 +64,27 @@ public class PlayerController : MonoBehaviour
                 rbPlayer.velocity = Vector2.zero;
             }
 
+             /* Player slash */
+            if (Input.GetMouseButton(0) /* && isGrounded */)
+            {
+                Slash();
+            }
+
+             /* Player throw weapon */
+            if (Input.GetKey(KeyCode.E) /* && isGrounded */)
+            {
+                Throw();
+            }
+
+
             /* Player jump */
-            if (Input.GetKey(KeyCode.Space) && isGrounded)
+            if (Input.GetKey(KeyCode.Space) /* && isGrounded */)
             {
                 Jump();
             }
             else if (!isGrounded && rbPlayer.velocity.y < 0)
             {
                 ChangeAnim("fall");
-            }
-
-            /* Player slash */
-            if (Input.GetMouseButton(0) && isGrounded)
-            {
-                Slash();
-            }
-
-            /* Player throw weapon */
-            if (Input.GetKey(KeyCode.E) && isGrounded)
-            {
-                Throw();
             }
         }
 
@@ -139,18 +141,21 @@ public class PlayerController : MonoBehaviour
     {
         Debug.DrawLine(transform.position, transform.position + Vector3.down * castWidth, Color.red);
         RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, castWidth, groundLayer);
-        // Debug.Log(hit.collider.name);
         return hit.collider != null;
     }
 
     //Changes animator player
     private void ChangeAnim(string animName)
     {
+        Debug.Log("Anim: "+animName);
         if (currentAnimName != animName)
         {
+            Debug.Log("Current Anim Before: "+ currentAnimName + " " + animName);
             animPlayer.ResetTrigger(animName);
             currentAnimName = animName;
+            Debug.Log("Current Anim After: "+ currentAnimName + " " + animName);
             animPlayer.SetTrigger(currentAnimName);
+            
         }
     }
 }
